@@ -1,0 +1,23 @@
+name = "movies-api"
+type = "javascript"
+account_id = "f90442acc75d6de465cf6c13b2f2b810"
+workers_dev = true
+compatibility_date = "2022-01-13"
+zone_id = "2fd9107fc647d965a1ae1985ca82731c"
+route = "movies-api.chapmanio.dev/*"
+
+[build]
+command = "npm install && npm run build"
+
+[build.upload]
+format = "service-worker"
+
+[dev]
+# local_protocol = "https"
+# port = 9000
+
+# [secrets]
+# DATABASE_URL
+# SHADOW_DATABASE_URL
+# MOVIE_API_KEY
+# JWT_SECRET
