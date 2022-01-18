@@ -18,6 +18,6 @@ router
   .all('/tv/*', tvRouter.handle)
   .all('/person/*', personRouter.handle)
   .all('/auth/*', authRouter.handle)
-  .all('*', () => NotFound);
+  .all('*', NotFound);
 
 addEventListener('fetch', (event) => event.respondWith(router.handle(event.request)));

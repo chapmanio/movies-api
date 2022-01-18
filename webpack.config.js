@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
@@ -10,6 +11,13 @@ module.exports = {
   mode: 'development',
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    fallback: {
+      buffer: require.resolve('buffer'),
+      crypto: require.resolve('crypto-browserify'),
+      process: require.resolve('process/browser'),
+      stream: require.resolve('stream-browserify'),
+      util: require.resolve('util'),
+    },
     alias: {
       '@prisma/client$': require.resolve('@prisma/client'),
     },
@@ -26,4 +34,9 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
+  ],
 };
