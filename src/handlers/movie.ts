@@ -1,34 +1,52 @@
 import type { IttyRequest } from '..';
+import { buildResponse, fetchExternal } from '../utils/response';
 import { theMovieDbApi } from '../utils/themoviedb';
 
-export const MovieSearch = ({ url }: IttyRequest): Promise<Response> => {
-  const { searchParams } = new URL(url);
+export const MovieSearch = async (request: IttyRequest): Promise<Response> => {
+  const origin = request.headers.get('origin');
+  const { searchParams } = new URL(request.url);
 
   const apiUrl = theMovieDbApi(`/search/movie`, searchParams);
 
-  return fetch(apiUrl);
+  return fetchExternal({ request: new Request(apiUrl), origin });
 };
 
-export const GetMovie = ({ url, params }: IttyRequest): Promise<Response> => {
+export const GetMovie = async (request: IttyRequest): Promise<Response> => {
+  const origin = request.headers.get('origin');
+
   // Get ID
-  const id = params ? params.id : undefined;
+  if (!request.params?.id) {
+    return buildResponse({
+      body: 'Movie ID param not supplied',
+      origin,
+      status: 422,
+    });
+  }
 
   // Call TMDB api and pass on query strings
-  const { searchParams } = new URL(url);
+  const { searchParams } = new URL(request.url);
 
-  const apiUrl = theMovieDbApi(`/movie/${id}`, searchParams);
+  const apiUrl = theMovieDbApi(`/movie/${request.params.id}`, searchParams);
 
-  return fetch(apiUrl);
+  return fetchExternal({ request: new Request(apiUrl), origin });
 };
 
-export const GetMovieCredits = ({ url, params }: IttyRequest): Promise<Response> => {
+export const GetMovieCredits = async (request: IttyRequest): Promise<Response> => {
+  const origin = request.headers.get('origin');
+
   // Get ID
-  const id = params ? params.id : undefined;
+  if (!request.params?.id) {
+    return buildResponse({
+      body: 'Movie ID param not supplied',
+      origin,
+      status: 422,
+    });
+  }
 
   // Call TMDB api and pass on query strings
-  const { searchParams } = new URL(url);
+  const { searchParams } = new URL(request.url);
 
-  const apiUrl = theMovieDbApi(`/movie/${id}/credits`, searchParams);
+  const apiUrl = theMovieDbApi(`/movie/${request.params.id}/credits`, searchParams);
 
-  return fetch(apiUrl);
+  return fetchExternal({ request: new Request(apiUrl), origin });
 };

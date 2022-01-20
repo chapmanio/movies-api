@@ -1,12 +1,14 @@
 import type { IttyRequest } from '..';
+import { fetchExternal } from '../utils/response';
 import { theMovieDbApi } from '../utils/themoviedb';
 
-const Search = ({ url }: IttyRequest): Promise<Response> => {
-  const { searchParams } = new URL(url);
+const Search = async (request: IttyRequest): Promise<Response> => {
+  const origin = request.headers.get('origin');
+  const { searchParams } = new URL(request.url);
 
   const apiUrl = theMovieDbApi(`/search/multi`, searchParams);
 
-  return fetch(apiUrl);
+  return fetchExternal({ request: new Request(apiUrl), origin });
 };
 
 export default Search;

@@ -8,5 +8,5 @@ authRouter
   .get('/', GetAuthState)
   .post('/sign-in', SignIn)
   .post('/register', Register)
-  .patch('/account/:id', UpdateAccount)
+  .post('/account/:email', UpdateAccount)
   .post('/sign-out', SignOut);

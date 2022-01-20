@@ -13,17 +13,21 @@ import { authRouter } from './routers/auth';
 // Types
 export type IttyRequest = IRequest & Request;
 
-// Router
-const router = Router({ base: '/api' });
+// API routes
+const apiRouter = Router({ base: '/api' });
 
-router
+apiRouter
   .get('/trending', Trending)
   .get('/search', Search)
   .all('/movie/*', movieRouter.handle)
   .all('/tv/*', tvRouter.handle)
   .all('/person/*', personRouter.handle)
-  .all('/auth/*', authRouter.handle)
-  .all('*', NotFound);
+  .all('/auth/*', authRouter.handle);
+
+// Base router
+const router = Router();
+
+router.all('/api/*', apiRouter.handle).all('*', NotFound);
 
 // Worker
 addEventListener('fetch', (event) => event.respondWith(router.handle(event.request)));

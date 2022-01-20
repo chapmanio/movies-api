@@ -1,9 +1,11 @@
+import { fetchExternal } from '../utils/response';
 import { theMovieDbApi } from '../utils/themoviedb';
 
-const Trending = async (): Promise<Response> => {
+const Trending = async (request: Request): Promise<Response> => {
+  const origin = request.headers.get('origin');
   const apiUrl = theMovieDbApi(`/trending/all/day`);
 
-  return fetch(apiUrl);
+  return fetchExternal({ request: new Request(apiUrl), origin });
 };
 
 export default Trending;

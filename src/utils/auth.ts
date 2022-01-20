@@ -1,6 +1,14 @@
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 
+// Constants
+const COOKIE_OPTIONS: cookie.CookieSerializeOptions = {
+  secure: true,
+  httpOnly: true,
+  path: '/',
+  sameSite: 'none',
+};
+
 // Types
 export type CookieParams = {
   userId: string;
@@ -14,13 +22,17 @@ export const createJwtCookie = (cookieData: CookieParams): string => {
   });
 
   const jwtCookie = cookie.serialize('jwt', token, {
-    secure: true,
-    httpOnly: true,
-    path: '/',
+    ...COOKIE_OPTIONS,
   });
+
   return jwtCookie;
 };
 
 export const clearCookie = (): string => {
-  return 'jwt=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  const jwtCookie = cookie.serialize('jwt', 'deleted', {
+    ...COOKIE_OPTIONS,
+    expires: new Date('Thu, 01 Jan 1970 00:00:00 GMT'),
+  });
+
+  return jwtCookie;
 };
