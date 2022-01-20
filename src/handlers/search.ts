@@ -1,8 +1,7 @@
-import type { Request } from 'itty-router';
-
+import type { IttyRequest } from '..';
 import { theMovieDbApi } from '../utils/themoviedb';
 
-const Search = ({ url }: Request): Promise<Response> => {
+const Search = ({ url }: IttyRequest): Promise<Response> => {
   const { searchParams } = new URL(url);
 
   const apiUrl = theMovieDbApi(`/search/multi`, searchParams);

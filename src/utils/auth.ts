@@ -1,8 +1,15 @@
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 
-export const createJwtCookie = (userId: string, email: string): string => {
-  const token = jwt.sign({ userId, email }, JWT_SECRET, {
+// Types
+export type CookieParams = {
+  userId: string;
+  email: string;
+};
+
+// Handlers
+export const createJwtCookie = (cookieData: CookieParams): string => {
+  const token = jwt.sign(cookieData, JWT_SECRET, {
     expiresIn: '10 days',
   });
 
@@ -11,7 +18,6 @@ export const createJwtCookie = (userId: string, email: string): string => {
     httpOnly: true,
     path: '/',
   });
-
   return jwtCookie;
 };
 

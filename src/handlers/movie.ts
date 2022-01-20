@@ -1,8 +1,7 @@
-import type { Request } from 'itty-router';
-
+import type { IttyRequest } from '..';
 import { theMovieDbApi } from '../utils/themoviedb';
 
-export const MovieSearch = ({ url }: Request): Promise<Response> => {
+export const MovieSearch = ({ url }: IttyRequest): Promise<Response> => {
   const { searchParams } = new URL(url);
 
   const apiUrl = theMovieDbApi(`/search/movie`, searchParams);
@@ -10,18 +9,26 @@ export const MovieSearch = ({ url }: Request): Promise<Response> => {
   return fetch(apiUrl);
 };
 
-export const GetMovie = ({ url, params }: Request): Promise<Response> => {
+export const GetMovie = ({ url, params }: IttyRequest): Promise<Response> => {
+  // Get ID
+  const id = params ? params.id : undefined;
+
+  // Call TMDB api and pass on query strings
   const { searchParams } = new URL(url);
 
-  const apiUrl = theMovieDbApi(`/movie/${params}`, searchParams);
+  const apiUrl = theMovieDbApi(`/movie/${id}`, searchParams);
 
   return fetch(apiUrl);
 };
 
-export const GetMovieCredits = ({ url, params }: Request): Promise<Response> => {
+export const GetMovieCredits = ({ url, params }: IttyRequest): Promise<Response> => {
+  // Get ID
+  const id = params ? params.id : undefined;
+
+  // Call TMDB api and pass on query strings
   const { searchParams } = new URL(url);
 
-  const apiUrl = theMovieDbApi(`/movie/${params}/credits`, searchParams);
+  const apiUrl = theMovieDbApi(`/movie/${id}/credits`, searchParams);
 
   return fetch(apiUrl);
 };
