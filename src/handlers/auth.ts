@@ -324,6 +324,53 @@ export const UpdateAccount = async (request: IttyRequest): Promise<Response> => 
   }
 };
 
+export const DeleteAccount = async (request: IttyRequest): Promise<Response> => {
+  const origin = request.headers.get('origin');
+
+  // Validate params
+  if (!request.params?.email) {
+    return buildResponse({
+      body: 'Email param not supplied',
+      origin,
+      status: 422,
+    });
+  }
+
+  // Check access
+  const cookiePayload = verifyCookie(request.headers.get('Cookie'));
+
+  if (!cookiePayload) {
+    return buildResponse({
+      body: 'You must be signed in to remove an account',
+      origin,
+      status: 401,
+    });
+  }
+
+  // Remove the users account
+  try {
+    const db = new PrismaClient();
+
+    await db.user.delete({
+      where: {
+        email: request.params.email,
+      },
+    });
+
+    // Remove the cookie
+    const response = buildResponse({
+      body: 'Account removed',
+      origin,
+    });
+
+    response.headers.set('Set-Cookie', clearCookie());
+
+    return response;
+  } catch (error) {
+    return buildErrorResponse({ error, origin });
+  }
+};
+
 export const SignOut = (request: Request): Response => {
   const origin = request.headers.get('origin');
 
