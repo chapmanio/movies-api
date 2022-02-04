@@ -25,6 +25,8 @@ model User {
   email        String   @unique
   passwordHash String
   lists        List[]
+
+  @@index([email])
 }
 
 model ListItem {
@@ -32,9 +34,12 @@ model ListItem {
   listId    String
   List      List      @relation(fields: [listId], references: [id])
   mediaType MediaType
-  mdbId     Int
+  tmdbId    Int
+  title     String
+  subtitle  String
+  posterUrl String
 
-  @@unique([listId, mediaType, mdbId])
+  @@unique([listId, mediaType, tmdbId])
 }
 
 model List {
@@ -44,6 +49,7 @@ model List {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   name      String
+  slug      String     @unique
   items     ListItem[]
 
   @@index([name])

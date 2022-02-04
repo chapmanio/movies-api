@@ -28,6 +28,40 @@ export const createJwtCookie = (cookieData: CookieParams): string => {
   return jwtCookie;
 };
 
+export const verifyCookie = (header: string | null): CookieParams | undefined => {
+  // Does the supplied header exist?
+  if (!header) {
+    return;
+  }
+
+  // Do we have the JWT token?
+  const cookies = cookie.parse(header);
+
+  if (!cookies.jwt) {
+    return;
+  }
+
+  // Is it a valid token?
+  const payload = jwt.verify(cookies.jwt, JWT_SECRET);
+
+  if (!payload || typeof payload === 'string') {
+    return;
+  }
+
+  // Retrieve the user ID
+  const { userId, email } = payload;
+
+  if (!userId || !email) {
+    return;
+  }
+
+  // All good
+  return {
+    userId,
+    email,
+  };
+};
+
 export const clearCookie = (): string => {
   const jwtCookie = cookie.serialize('jwt', 'deleted', {
     ...COOKIE_OPTIONS,

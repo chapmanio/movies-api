@@ -14,7 +14,8 @@
     "cookie": "^0.4.1",
     "itty-router": "^2.4.8",
     "jsonwebtoken": "^8.5.1",
-    "moviedb-promise": "^3.1.12"
+    "moviedb-promise": "^3.1.12",
+    "slugify": "^1.6.5"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.0.0",

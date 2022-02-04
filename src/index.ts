@@ -9,6 +9,7 @@ import { movieRouter } from './routers/movie';
 import { personRouter } from './routers/person';
 import { tvRouter } from './routers/tv';
 import { authRouter } from './routers/auth';
+import { listRouter } from './routers/list';
 
 // Types
 export type IttyRequest = IRequest & Request;
@@ -22,7 +23,8 @@ apiRouter
   .all('/movie/*', movieRouter.handle)
   .all('/tv/*', tvRouter.handle)
   .all('/person/*', personRouter.handle)
-  .all('/auth/*', authRouter.handle);
+  .all('/auth/*', authRouter.handle)
+  .all('/list/*', listRouter.handle);
 
 // Base router
 const router = Router();

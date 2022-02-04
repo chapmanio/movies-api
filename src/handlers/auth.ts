@@ -1,12 +1,9 @@
-import cookie from 'cookie';
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@prisma/client';
 
 import type { IttyRequest } from '..';
 import { buildErrorResponse, buildResponse } from '../utils/response';
-import { clearCookie, createJwtCookie } from '../utils/auth';
-import type { CookieParams } from '../utils/auth';
+import { clearCookie, createJwtCookie, verifyCookie } from '../utils/auth';
 
 // Types
 type SignInParams = {
@@ -24,41 +21,6 @@ type AccountParams = {
   name?: string;
   email?: string;
   password?: string;
-};
-
-// Helpers
-const verifyCookie = (header: string | null): CookieParams | undefined => {
-  // Does the supplied header exist?
-  if (!header) {
-    return;
-  }
-
-  // Do we have the JWT token?
-  const cookies = cookie.parse(header);
-
-  if (!cookies.jwt) {
-    return;
-  }
-
-  // Is it a valid token?
-  const payload = jwt.verify(cookies.jwt, JWT_SECRET);
-
-  if (!payload || typeof payload === 'string') {
-    return;
-  }
-
-  // Retrieve the user ID
-  const { userId, email } = payload;
-
-  if (!userId || !email) {
-    return;
-  }
-
-  // All good
-  return {
-    userId,
-    email,
-  };
 };
 
 // Handlers
