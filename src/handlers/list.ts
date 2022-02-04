@@ -18,7 +18,9 @@ export const GetAllLists = async (request: IttyRequest): Promise<Response> => {
     // Get all lists
     const db = new PrismaClient();
 
-    const lists = await db.list.findMany();
+    const lists = await db.list.findMany({
+      orderBy: [{ name: 'asc' }],
+    });
 
     return buildResponse({
       body: lists,
