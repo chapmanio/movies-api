@@ -15,7 +15,7 @@ export const GetTv = async (request: IttyRequest): Promise<Response> => {
   const origin = request.headers.get('origin');
 
   // Get ID
-  if (!request.params?.id) {
+  if (!request.params || request.params.id) {
     return buildResponse({
       body: 'TV ID param not supplied',
       origin,
@@ -35,7 +35,7 @@ export const GetTvCredits = async (request: IttyRequest): Promise<Response> => {
   const origin = request.headers.get('origin');
 
   // Get ID
-  if (!request.params?.id) {
+  if (!request.params || request.params.id) {
     return buildResponse({
       body: 'TV ID param not supplied',
       origin,

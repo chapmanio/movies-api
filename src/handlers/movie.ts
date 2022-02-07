@@ -15,7 +15,7 @@ export const GetMovie = async (request: IttyRequest): Promise<Response> => {
   const origin = request.headers.get('origin');
 
   // Get ID
-  if (!request.params?.id) {
+  if (!request.params || request.params.id) {
     return buildResponse({
       body: 'Movie ID param not supplied',
       origin,
@@ -35,7 +35,7 @@ export const GetMovieCredits = async (request: IttyRequest): Promise<Response> =
   const origin = request.headers.get('origin');
 
   // Get ID
-  if (!request.params?.id) {
+  if (!request.params || request.params.id) {
     return buildResponse({
       body: 'Movie ID param not supplied',
       origin,

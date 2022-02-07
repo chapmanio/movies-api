@@ -206,7 +206,7 @@ export const UpdateAccount = async (request: IttyRequest): Promise<Response> => 
   const origin = request.headers.get('origin');
 
   // Validate params
-  if (!request.params?.email) {
+  if (!request.params || !request.params.email) {
     return buildResponse({
       body: 'Email param not supplied',
       origin,
@@ -290,7 +290,7 @@ export const DeleteAccount = async (request: IttyRequest): Promise<Response> => 
   const origin = request.headers.get('origin');
 
   // Validate params
-  if (!request.params?.email) {
+  if (!request.params || request.params.email) {
     return buildResponse({
       body: 'Email param not supplied',
       origin,

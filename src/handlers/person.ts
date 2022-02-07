@@ -15,7 +15,7 @@ export const GetPerson = async (request: IttyRequest): Promise<Response> => {
   const origin = request.headers.get('origin');
 
   // Get ID
-  if (!request.params?.id) {
+  if (!request.params || request.params.id) {
     return buildResponse({
       body: 'Person ID param not supplied',
       origin,
@@ -35,7 +35,7 @@ export const GetPersonCredits = async (request: IttyRequest): Promise<Response> 
   const origin = request.headers.get('origin');
 
   // Get ID
-  if (!request.params?.id) {
+  if (!request.params || request.params.id) {
     return buildResponse({
       body: 'Person ID param not supplied',
       origin,
