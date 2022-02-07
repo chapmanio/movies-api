@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
@@ -7,48 +6,28 @@ module.exports = {
     filename: 'worker.js',
     path: path.join(__dirname, 'dist'),
   },
-  devtool: 'cheap-module-source-map',
-  mode: 'development',
+  // Cloudflare Worker environment is similar to a webworker
+  target: 'webworker',
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
-    fallback: {
-      assert: require.resolve('assert'),
-      buffer: require.resolve('buffer'),
-      console: require.resolve('console-browserify'),
-      constants: require.resolve('constants-browserify'),
-      crypto: require.resolve('crypto-browserify'),
-      http: require.resolve('stream-http'),
-      https: require.resolve('https-browserify'),
-      os: require.resolve('os-browserify/browser'),
-      process: require.resolve('process/browser'),
-      stream: require.resolve('stream-browserify'),
-      tty: require.resolve('tty-browserify'),
-      url: require.resolve('url'),
-      util: require.resolve('util'),
-      zlib: require.resolve('browserify-zlib'),
-    },
+    // Alias for resolving the Prisma Client properly
     alias: {
       '@prisma/client$': require.resolve('@prisma/client'),
     },
   },
+  mode: 'development',
+  // Wrangler doesn't like eval which devtools use in development.
+  devtool: 'none',
   module: {
     rules: [
       {
+        // Compile Typescript code
         test: /\.tsx?$/,
         loader: 'ts-loader',
         options: {
-          // transpileOnly is useful to skip typescript checks occasionally:
-          // transpileOnly: true,
+          transpileOnly: true,
         },
       },
     ],
   },
-  plugins: [
-    new webpack.ProvidePlugin({
-      process: 'process/browser',
-    }),
-    new webpack.ProvidePlugin({
-      Buffer: ['buffer', 'Buffer'],
-    }),
-  ],
 };
