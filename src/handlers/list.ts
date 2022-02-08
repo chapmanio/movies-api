@@ -35,7 +35,7 @@ export const GetList = async (request: IttyRequest): Promise<Response> => {
   const origin = request.headers.get('origin');
 
   // Validate params
-  if (!request.params || request.params.slug) {
+  if (!request.params || !request.params.slug) {
     return buildResponse({
       body: 'List slug param not supplied',
       origin,
@@ -158,7 +158,7 @@ export const UpdateList = async (request: IttyRequest): Promise<Response> => {
   const origin = request.headers.get('origin');
 
   // Validate params
-  if (!request.params || request.params.slug) {
+  if (!request.params || !request.params.slug) {
     return buildResponse({
       body: 'Slug param not supplied',
       origin,
@@ -254,7 +254,7 @@ export const DeleteList = async (request: IttyRequest): Promise<Response> => {
   const origin = request.headers.get('origin');
 
   // Validate params
-  if (!request.params || request.params.slug) {
+  if (!request.params || !request.params.slug) {
     return buildResponse({
       body: 'Slug param not supplied',
       origin,
