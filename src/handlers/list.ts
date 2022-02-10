@@ -14,11 +14,25 @@ type ListParams = {
 export const GetAllLists = async (request: IttyRequest): Promise<Response> => {
   const origin = request.headers.get('origin');
 
+  // Check access
+  const cookiePayload = verifyCookie(request.headers.get('Cookie'));
+
+  if (!cookiePayload) {
+    return buildResponse({
+      body: 'You must be signed in to retrieve lists',
+      origin,
+      status: 401,
+    });
+  }
+
   try {
+    const { userId } = cookiePayload;
+
     // Get all lists
     const db = new PrismaClient();
 
     const lists = await db.list.findMany({
+      where: { userId },
       orderBy: [{ name: 'asc' }],
       include: {
         items: { orderBy: [{ title: 'asc' }] },
