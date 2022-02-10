@@ -20,6 +20,9 @@ export const GetAllLists = async (request: IttyRequest): Promise<Response> => {
 
     const lists = await db.list.findMany({
       orderBy: [{ name: 'asc' }],
+      include: {
+        items: { orderBy: [{ title: 'asc' }] },
+      },
     });
 
     return buildResponse({
@@ -64,11 +67,14 @@ export const GetList = async (request: IttyRequest): Promise<Response> => {
       where: {
         slug: request.params.slug,
       },
+      include: {
+        items: { orderBy: [{ title: 'asc' }] },
+      },
     });
 
     if (!list) {
       return buildResponse({
-        body: `No list found with slug: ${request.params.slug}`,
+        body: `List not found`,
         origin,
         status: 404,
       });
@@ -238,6 +244,9 @@ export const UpdateList = async (request: IttyRequest): Promise<Response> => {
       },
       where: {
         slug: request.params.slug,
+      },
+      include: {
+        items: { orderBy: [{ title: 'asc' }] },
       },
     });
 

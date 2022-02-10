@@ -32,12 +32,12 @@ model User {
 model ListItem {
   id        String    @id @default(uuid())
   listId    String
-  List      List      @relation(fields: [listId], references: [id])
+  List      List      @relation(fields: [listId], references: [id], onDelete: Cascade)
   mediaType MediaType
   tmdbId    Int
   title     String
-  subtitle  String
-  posterUrl String
+  subtitle  String?
+  posterUrl String?
 
   @@unique([listId, mediaType, tmdbId])
 }

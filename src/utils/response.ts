@@ -54,7 +54,7 @@ export const buildErrorResponse = ({ error, origin }: ErrorResponseParams): Resp
     switch (error.code) {
       case 'P2002':
         return buildResponse({
-          body: 'An account already exists with that email',
+          body: 'Already exists',
           origin,
           status: 422,
         });
