@@ -11,5 +11,6 @@ webpack_config = "webpack.config.js"
 
 # [secrets]
 # DATABASE_URL
+# COOKIE_DOMAIN
 # MOVIE_API_KEY
 # JWT_SECRET

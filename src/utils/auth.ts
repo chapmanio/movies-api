@@ -7,6 +7,7 @@ const COOKIE_OPTIONS: cookie.CookieSerializeOptions = {
   httpOnly: true,
   path: '/',
   sameSite: 'none',
+  domain: COOKIE_DOMAIN,
 };
 
 // Types
