@@ -1,16 +1,19 @@
-name = "movies-api"
 type = "webpack"
-route = "movies-api.chapmanio.dev/*"
 account_id = "f90442acc75d6de465cf6c13b2f2b810"
-zone_id = "2fd9107fc647d965a1ae1985ca82731c"
-usage_model = ''
-compatibility_flags = []
-workers_dev = true
-compatibility_date = "2022-02-07"
 webpack_config = "webpack.config.js"
+compatibility_date = "2022-02-07"
+
+name = "movies-api-dev"
+workers_dev = true
+vars = { ENVIRONMENT = "dev", COOKIE_DOMAIN = "" }
+
+[env.prod]
+name = "movies-api-prod"
+zone_id = "2fd9107fc647d965a1ae1985ca82731c"
+route = "movies-api.chapmanio.dev/*"
+vars = { ENVIRONMENT = "prod", COOKIE_DOMAIN = ".chapmanio.dev" }
 
 # [secrets]
 # DATABASE_URL
-# COOKIE_DOMAIN
 # MOVIE_API_KEY
 # JWT_SECRET
