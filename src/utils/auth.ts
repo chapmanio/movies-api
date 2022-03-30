@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 
 // Constants
+const COOKIE_NAME = 'moviesApi';
 const COOKIE_OPTIONS: cookie.CookieSerializeOptions = {
   secure: true,
   httpOnly: true,
@@ -24,7 +25,7 @@ export const createJwtCookie = (cookieData: CookieParams): string => {
     expiresIn: '10 days',
   });
 
-  const jwtCookie = cookie.serialize('jwt', token, {
+  const jwtCookie = cookie.serialize(COOKIE_NAME, token, {
     ...COOKIE_OPTIONS,
   });
 
@@ -39,13 +40,14 @@ export const verifyCookie = (header: string | null): CookieParams | undefined =>
 
   // Do we have the JWT token?
   const cookies = cookie.parse(header);
+  const apiCookie = cookies[COOKIE_NAME];
 
-  if (!cookies.jwt) {
+  if (!apiCookie) {
     return;
   }
 
   // Is it a valid token?
-  const payload = jwt.verify(cookies.jwt, JWT_SECRET);
+  const payload = jwt.verify(apiCookie, JWT_SECRET);
 
   if (!payload || typeof payload === 'string') {
     return;
@@ -66,7 +68,7 @@ export const verifyCookie = (header: string | null): CookieParams | undefined =>
 };
 
 export const clearCookie = (): string => {
-  const jwtCookie = cookie.serialize('jwt', 'deleted', {
+  const jwtCookie = cookie.serialize(COOKIE_NAME, 'deleted', {
     ...COOKIE_OPTIONS,
     expires: new Date('Thu, 01 Jan 1970 00:00:00 GMT'),
   });
