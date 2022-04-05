@@ -326,14 +326,14 @@ export const DeleteList = async (request: IttyRequest): Promise<Response> => {
     }
 
     // Update the list
-    await db.list.delete({
+    const removedList = await db.list.delete({
       where: {
         slug: request.params.slug,
       },
     });
 
     return buildResponse({
-      body: 'List removed',
+      body: removedList,
       origin,
     });
   } catch (error) {
