@@ -14,13 +14,92 @@ type ListItemParams = {
 };
 
 // Handlers
+export const GetListItem = async (request: IttyRequest): Promise<Response> => {
+  const origin = request.headers.get('origin');
+
+  // Validate params
+  if (!request.params || !request.params.listSlug || !request.params.id) {
+    return buildResponse({
+      body: 'List ID params not supplied',
+      origin,
+      status: 422,
+    });
+  }
+
+  // Check access
+  const cookiePayload = verifyCookie(request.headers.get('Cookie'));
+
+  if (!cookiePayload) {
+    return buildResponse({
+      body: 'You must be signed in to view a new list',
+      origin,
+      status: 401,
+    });
+  }
+
+  try {
+    const { userId } = cookiePayload;
+
+    // Get list
+    const db = new PrismaClient();
+
+    const list = await db.list.findUnique({
+      where: {
+        slug: request.params.slug,
+      },
+      include: {
+        items: { orderBy: [{ title: 'asc' }] },
+      },
+    });
+
+    if (!list) {
+      return buildResponse({
+        body: `List not found`,
+        origin,
+        status: 404,
+      });
+    }
+
+    // Check if the user owns the list
+    if (list.userId !== userId) {
+      return buildResponse({
+        body: 'You may only view your own lists',
+        origin,
+        status: 403,
+      });
+    }
+
+    // Get list item
+    const listItem = await db.listItem.findUnique({
+      where: {
+        id: request.params.id,
+      },
+    });
+
+    if (!listItem) {
+      return buildResponse({
+        body: `List item not found`,
+        origin,
+        status: 404,
+      });
+    }
+
+    return buildResponse({
+      body: listItem,
+      origin,
+    });
+  } catch (error) {
+    return buildErrorResponse({ error, origin, status: 502 });
+  }
+};
+
 export const AddListItem = async (request: IttyRequest): Promise<Response> => {
   const origin = request.headers.get('origin');
 
   // Validate params
-  if (!request.params || !request.params.listId) {
+  if (!request.params || !request.params.listSlug) {
     return buildResponse({
-      body: 'List ID param not supplied',
+      body: 'List slug param not supplied',
       origin,
       status: 422,
     });
@@ -69,7 +148,7 @@ export const AddListItem = async (request: IttyRequest): Promise<Response> => {
 
     const list = await db.list.findUnique({
       where: {
-        id: request.params.listId,
+        slug: request.params.listSlug,
       },
     });
 
@@ -115,9 +194,9 @@ export const DeleteListItem = async (request: IttyRequest): Promise<Response> =>
   const origin = request.headers.get('origin');
 
   // Validate params
-  if (!request.params || !request.params.listId || !request.params.id) {
+  if (!request.params || !request.params.listSlug || !request.params.id) {
     return buildResponse({
-      body: 'List ID or List item ID param not supplied',
+      body: 'List ID params not supplied',
       origin,
       status: 422,
     });
@@ -142,7 +221,7 @@ export const DeleteListItem = async (request: IttyRequest): Promise<Response> =>
 
     const list = await db.list.findUnique({
       where: {
-        id: request.params.listId,
+        slug: request.params.listSlug,
       },
     });
 
