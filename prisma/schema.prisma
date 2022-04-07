@@ -31,15 +31,15 @@ model User {
 
 model ListItem {
   id        String    @id @default(uuid())
-  listId    String
-  list      List      @relation(fields: [listId], references: [id], onDelete: Cascade)
+  listSlug  String
+  list      List      @relation(fields: [listSlug], references: [id], onDelete: Cascade)
   mediaType MediaType
   tmdbId    Int
   title     String
   subtitle  String?
   posterUrl String?
 
-  @@unique([listId, mediaType, tmdbId])
+  @@unique([listSlug, mediaType, tmdbId])
 }
 
 model List {

@@ -172,7 +172,7 @@ export const AddListItem = async (request: IttyRequest): Promise<Response> => {
     // Add the list item
     const listItem = await db.listItem.create({
       data: {
-        listId: request.params.listId,
+        listSlug: request.params.listSlug,
         mediaType,
         tmdbId,
         title,
