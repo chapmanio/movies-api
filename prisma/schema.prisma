@@ -32,7 +32,7 @@ model User {
 model ListItem {
   id        String    @id @default(uuid())
   listSlug  String
-  list      List      @relation(fields: [listSlug], references: [id], onDelete: Cascade)
+  list      List      @relation(fields: [listSlug], references: [slug], onDelete: Cascade)
   mediaType MediaType
   tmdbId    Int
   title     String
